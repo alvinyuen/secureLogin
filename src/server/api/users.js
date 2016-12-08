@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const User = require('../models/user');
 
+
 module.exports = router;
 
 router.use((req, res, next) => {
@@ -19,3 +20,34 @@ router.get('/', (req, res, next) => {
     .catch(next);
 });
 
+//sign up user
+router.post('/', (req, res, next)=> {
+	User.create({
+		email: req.body.email,
+		password_hash: req.body.password
+	})
+	.then((user)=> {
+		return res.cookie('authentication-token', user.cookie)
+	})
+	.then((res)=>{
+		res.redirect('http://localhost:3001');
+	})
+})
+
+//login user
+router.get('/:userEmail/:password', (req, res, next)=>{
+
+	console.log('COOKIES', req.cookie);
+	
+	User.findOne({
+		where:{
+			email: req.params.userEmail,
+			password_hash: req.params.password 
+		}
+	})
+	.then(user=>{
+		res.redirect('/');
+	});
+
+
+});

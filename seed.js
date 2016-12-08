@@ -7,7 +7,7 @@ db.sync({ force: true })
     return User.create(
       {
         email: 'bob@loblaw.law.blog',
-        password: '123456',
+        password_hash: '123456',
       });
   })
   .then(() => {
